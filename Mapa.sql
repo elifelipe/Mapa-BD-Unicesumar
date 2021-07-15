@@ -287,19 +287,21 @@ SELECT * FROM Produto WHERE peso BETWEEN 0.60 AND 2.00;
 DELIMITER $
 
 CREATE TRIGGER Tgr_ItensEntrada_Insert AFTER INSERT
-ON Entrada
+ON ItemEntrada
 FOR EACH ROW
 BEGIN
-	UPDATE ItemEntrada SET qtde = qtde - NEW.total
-WHERE lote = NEW.total;
+	UPDATE Entrada SET total = total - NEW.qtde
+WHERE total = NEW.lote;
 END$
 
 CREATE TRIGGER Tgr_ItensSaida_Delete AFTER DELETE
-ON Saida
+ON ItemSaida
 FOR EACH ROW
 BEGIN
-	UPDATE ItemSaida SET qtde = qtde + OLD.total
-WHERE lote = OLD.total;
+	UPDATE Saida SET total = total + OLD.qtde
+WHERE total = OLD.lote;
 END$
 
 DELIMITER ;
+
+SHOW TRIGGERS;
